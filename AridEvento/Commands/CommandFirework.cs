@@ -6,8 +6,9 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using EventoMX.Behaviors;
+using EventoMX.Behaviours.Presents;
 using EventoMX.FireworkData;
-using EventoMX.Kits;
+using EventoMX.Points.Kits;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -46,7 +47,7 @@ namespace EventoMX.Commands
                     GameObject asd = new GameObject();
                     var fireworkObject = Provider.players[i].player.gameObject.GetOrAddComponent<FireworkBehaviourPlayer>();
                     fireworkObject.Launch();
-                     await System.Threading.Tasks.Task.Delay(100);
+                     await System.Threading.Tasks.Task.Delay(175);
                     
                 }
                  await UniTask.CompletedTask;

@@ -32,21 +32,22 @@ namespace EventoMX.Eventos
             // Appareal
             {
                 var face = typeof(SteamPending).GetField("_face", BindingFlags.NonPublic | BindingFlags.Instance);
-                face.SetValue(_pendingPlayer, 11);
-
+                face.SetValue(_pendingPlayer, (byte)11);
+                var beard = typeof(SteamPending).GetField("_beard", BindingFlags.NonPublic | BindingFlags.Instance);
+                beard.SetValue(_pendingPlayer, (byte)8);
                 /* var hair = typeof(SteamPending).GetField("_hair", BindingFlags.NonPublic | BindingFlags.Instance);
-                hair.SetValue(_pendingPlayer, 0); */
+                hair.SetValue(_pendingPlayer, 0); 
 
                 var beard = typeof(SteamPending).GetField("_beard", BindingFlags.NonPublic | BindingFlags.Instance);
                 beard.SetValue(_pendingPlayer, 8);
 
                 var skinColor = typeof(SteamPending).GetField("_skin", BindingFlags.NonPublic | BindingFlags.Instance);
 
-                skinColor.SetValue(_pendingPlayer, new Color(0.1f, 0.2f, 0.3f));
+                skinColor.SetValue(_pendingPlayer, Color.white);
 
                 var hairColor = typeof(SteamPending).GetField("_color", BindingFlags.NonPublic | BindingFlags.Instance);
                 // Convert UnityEngine.Color to Color32
-                hairColor.SetValue(_pendingPlayer, new Color(0.1f, 0.2f, 0.3f));
+                hairColor.SetValue(_pendingPlayer, Color.white); */
 
             }
             // Clothes
@@ -55,7 +56,6 @@ namespace EventoMX.Eventos
                 _pendingPlayer.shirtItem = 63601;
                 _pendingPlayer.pantsItem = 63701;
                 _pendingPlayer.backpackItem = 94600;
-                _pendingPlayer.maskItem = 0;
                 _pendingPlayer.vestItem = 64801;
             }
             return Task.CompletedTask;

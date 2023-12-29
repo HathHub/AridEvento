@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using EventoMX.KitModel;
-using EventoMX.Kits;
 using HarmonyLib;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
@@ -19,6 +17,12 @@ using OpenMod.UnityEngine.Extensions;
 using OpenMod.Unturned.Players.Life.Events;
 using OpenMod.Unturned.Plugins;
 using SDG.Unturned;
+using OpenMod.Extensions.Games.Abstractions.Players;
+using OpenMod.API.Commands;
+using OpenMod.Core.Console;
+using OpenMod.Core.Users;
+using OpenMod.Unturned.Users;
+using EventoMX.Points;
 
 // For more, visit https://openmod.github.io/openmod-docs/devdoc/guides/getting-started.html
 
@@ -29,17 +33,17 @@ namespace EventoMX.Eventos
     public class UnturnedPlayerRevivedEventListener : IEventListener<UnturnedPlayerSpawnedEvent>
     {
         private readonly ILogger<UserConnectingEventListener> m_Logger;
-        public Kits.Kits KitList { get; set; } = new Kits.Kits();
-
+        private readonly ICommandExecutor m_commandEx;
+        private readonly ICommandActor m_actor;
 
         private readonly Random m_Random = new Random();
 
-        public UnturnedPlayerRevivedEventListener(ILogger<UserConnectingEventListener> logger)
+        public UnturnedPlayerRevivedEventListener(ILogger<UserConnectingEventListener> logger, ICommandExecutor commandEx, ICommandActor actor)
         {
             m_Logger = logger;
-            KitList = new Kits.Kits();
+            m_actor = actor;
+            m_commandEx = commandEx;
         }
-
         public Task HandleEventAsync(object sender, UnturnedPlayerSpawnedEvent @event)
         {
             var asset = Assets.find(EAssetType.EFFECT, m_Random.Next(3) switch { 0 => 124, 1 => 130, _ => 134 });
@@ -50,30 +54,9 @@ namespace EventoMX.Eventos
                 relevantDistance = 10
             };
             EffectManager.triggerEffect(eff);
-            Kit randomKit = GetRandomKit();
-            m_Logger.LogInformation(KitList.KitList.Count.ToString());
-            foreach (CItem item in randomKit.items)
-            {
-                player.inventory.tryAddItem(new Item(item.id, true, 100), item.x, item.y, item.page, item.rot);
-            }
-            foreach (Binding binding in randomKit.bindings)
-            {
-                ItemAsset Asset = Assets.find(EAssetType.ITEM, binding.id) as ItemAsset;
-                player.equipment.ServerBindItemHotkey(binding.key, Asset, 2, 4, 5);
-            }
+            //m_commandEx.ExecuteAsync(, new string[1] { $"kit {@event.Player.SteamId.ToString()} {GetRandomKit()}" }, string.Empty);
             return Task.CompletedTask;
         }
-
-        private Kit GetRandomKit()
-        {
-            if (KitList.KitList.Count == 0)
-            {
-                // Handle the case where there are no kits available
-                return null;
-            }
-
-            int randomIndex = m_Random.Next(KitList.KitList.Count);
-            return KitList.KitList[randomIndex];
-        }
+         
     }
 }

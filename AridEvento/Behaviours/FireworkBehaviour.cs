@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AsmResolver.Collections;
 using EventoMX.Behaviours;
+using Newtonsoft.Json.Linq;
 using SDG.Unturned;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -26,18 +29,35 @@ namespace EventoMX.Behaviors
         public ushort ExplosionRadius { get; set; } = 20;
         public ushort ExplosionEffect { get; set; } = 20;
         public ushort ExplosionEffectCount { get; set; } = 70;
-        public List<ushort> ExplosionEffects { get; } = new List<ushort>() { 124, 130, 312, 134, 139, 124, 130, 134};
+        private readonly System.Random m_Random = new System.Random();
+        //public List<ushort> ExplosionEffects { get; } = new List<ushort>() { 124, 130, 312, 134, 139, 124, 130, 134};
+        public List<List<ushort>> ExplosionEffects { get; } = new List<List<ushort>>()
+        {
+            new List<ushort> { 124, 139, 125 },
+            new List<ushort> { 130, 131, 139 },
+            new List<ushort>() { 124, 130, 312, 134, 139, 124, 130, 134},
+            new List<ushort> { 132, 133, 139 },
+            new List<ushort> { 134, 135, 139 }
+        };
+
         public EffectTrailer Trailer { get; private set; }
         private GameObject fireworkObject;
         private float m_PrevGravity = 1f;
-
         public void Awake()
         {
             Player = GetComponent<Player>();
             Trailer = gameObject.AddComponent<EffectTrailer>();
             Trailer.Radius = EffectManager.INSANE;
         }
-
+        private List<ushort> GetRandomFirework()
+        {
+            if (ExplosionEffects.Count == 0)
+            {
+                return null;
+            }
+            int randomIndex = m_Random.Next(ExplosionEffects.Count);
+            return ExplosionEffects[randomIndex];
+        }
         public void Launch()
         {
             // Create a new GameObject for the firework at the player's position
@@ -113,12 +133,13 @@ namespace EventoMX.Behaviors
             }
 
             var effects = new List<(Vector3 pos, ushort effect)>();
+            int firework = UnityEngine.Random.Range(0, ExplosionEffects.Count);
 
             for (int i = 0; i < ExplosionEffectCount; i++)
             {
-                var randomEffect = ExplosionEffects[Random.Range(0, ExplosionEffects.Count)];
+                var randomEffect = ExplosionEffects[firework][UnityEngine.Random.Range(0, ExplosionEffects[firework].Count)];
 
-                var position = fireworkObject.transform.position + (Random.insideUnitSphere * ExplosionRadius);
+                var position = fireworkObject.transform.position + (UnityEngine.Random.insideUnitSphere * ExplosionRadius);
 
                 effects.Add((position, randomEffect));
             }

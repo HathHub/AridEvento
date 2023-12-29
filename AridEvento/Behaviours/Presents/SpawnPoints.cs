@@ -5,7 +5,7 @@ using SDG.Unturned;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace EventoMX.Presents
+namespace EventoMX.Behaviours.Presents
 {
     public class SpawnPoints
     {
