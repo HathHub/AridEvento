@@ -23,6 +23,7 @@ using OpenMod.Unturned.Plugins;
 using OpenMod.Unturned.Users;
 using SDG.Unturned;
 using UnityEngine;
+using static EventoMX.Points.Points;
 using static SDG.Unturned.WeatherAsset;
 
 // For more, visit https://openmod.github.io/openmod-docs/devdoc/guides/getting-started.html
@@ -41,7 +42,7 @@ namespace EventoMX.Commands
         protected override async Task OnExecuteAsync()
         {
             UnturnedUser user = (UnturnedUser)Context.Actor;
-            int points = Points.Points.PointsTrack.TryGetValue(user.SteamId, out int value) ? value : 0;
+            int points = Points.Points.PointsTrack.TryGetValue(user.SteamId, out PlayerData value) ? value.Points : 0;
             await Context.Actor.PrintMessageAsync($"{points}");
             await UniTask.CompletedTask;
         }

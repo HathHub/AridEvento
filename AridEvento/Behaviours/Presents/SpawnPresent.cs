@@ -11,7 +11,7 @@ namespace EventoMX.Behaviours.Presents
 {
     public class Present
     {
-        public void SpawnPresent(Vector3 position, Barricade barricade)
+        public static void SpawnPresent(Vector3 position, Barricade barricade)
         {
             var vector = new Vector3(position.x, position.y + 0.5f, position.z);
             Transform barr = BarricadeManager.dropNonPlantedBarricade(barricade, vector, Quaternion.Euler(new Vector3(270f, 0f, 180f)), (ulong)CSteamID.Nil, (ulong)CSteamID.Nil);

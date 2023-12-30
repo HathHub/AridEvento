@@ -60,21 +60,14 @@ namespace EventoMX.Behaviors
         }
         public void Launch()
         {
-            // Create a new GameObject for the firework at the player's position
             fireworkObject = new GameObject("Firework");
             fireworkObject.transform.position = transform.position;
-
-            // Attach the EffectTrailer script to the fireworkObject
             var trailer = fireworkObject.AddComponent<EffectTrailer>();
             trailer.EffectID = TrailEffectID;
             trailer.Rate = TrailRate;
             trailer.Radius = EffectManager.INSANE;
-
-            // Enable trail effects for the fireworkObject
             var effectTrailer = fireworkObject.GetComponent<EffectTrailer>();
             effectTrailer.enabled = true;
-
-            // Set launched
             Launched = Time.realtimeSinceStartup;
             IsLaunched = true;
         }
@@ -103,10 +96,8 @@ namespace EventoMX.Behaviors
                 }
             }
         }
-
         private void Stop()
         {
-            // Destroy the fireworkObject instead of modifying player's position
             Destroy(fireworkObject);
             IsLaunched = false;
             Trailer.enabled = false;
@@ -118,14 +109,10 @@ namespace EventoMX.Behaviors
             {
                 yield break;
             }
-
             var effectDelay = timeToComplete / ExplosionEffectCount;
             var frameTime = 1f / 50f;
             var effectsPerFrame = 1;
             var initialDelay = effectDelay;
-
-            // If the delay is too short, it will be rounded to the next frame.
-            // So run more effects per frame and increase the effect delay instead.
             while (effectDelay < frameTime)
             {
                 effectDelay += initialDelay;
@@ -143,8 +130,6 @@ namespace EventoMX.Behaviors
 
                 effects.Add((position, randomEffect));
             }
-
-            // Order effects inside to out of the sphere to simulate an outward explosion
             var ordered = effects.OrderBy(x => (fireworkObject.transform.position - x.pos).sqrMagnitude);
 
             var queue = new Queue<(Vector3 pos, ushort effect)>();
@@ -164,8 +149,6 @@ namespace EventoMX.Behaviors
                 }
                 yield return new WaitForSeconds(effectDelay);
             }
-
-            // If set, destroy the object once the coroutine is finished
             if (destroyPost)
             {
                 Destroy(Trailer);

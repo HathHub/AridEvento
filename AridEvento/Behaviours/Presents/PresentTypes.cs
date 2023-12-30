@@ -7,9 +7,9 @@ using UnityEngine.UIElements;
 
 namespace EventoMX.Behaviours.Presents
 {
-    public class PresentTypes
+    public static class PresentTypes
     {
-        public List<ushort> PresentTypesList { get; set; } = new List<ushort>
+        public static List<ushort> PresentTypesList { get; set; } = new List<ushort>
         {
             1699,
             1698,

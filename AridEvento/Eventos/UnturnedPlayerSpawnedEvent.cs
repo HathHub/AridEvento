@@ -23,6 +23,8 @@ using OpenMod.Core.Console;
 using OpenMod.Core.Users;
 using OpenMod.Unturned.Users;
 using EventoMX.Points;
+using EventoMX.Points.Kits;
+using Steamworks;
 
 // For more, visit https://openmod.github.io/openmod-docs/devdoc/guides/getting-started.html
 
@@ -33,19 +35,19 @@ namespace EventoMX.Eventos
     public class UnturnedPlayerRevivedEventListener : IEventListener<UnturnedPlayerSpawnedEvent>
     {
         private readonly ILogger<UserConnectingEventListener> m_Logger;
-        private readonly ICommandExecutor m_commandEx;
-        private readonly ICommandActor m_actor;
-
+        private readonly IUnturnedUserDirectory _userDirectory;
+        private readonly ICommandExecutor _commandExecutor;
         private readonly Random m_Random = new Random();
-
-        public UnturnedPlayerRevivedEventListener(ILogger<UserConnectingEventListener> logger, ICommandExecutor commandEx, ICommandActor actor)
+        public UnturnedPlayerRevivedEventListener(IUnturnedUserDirectory userDirectory,
+            ICommandExecutor commandExecutor,
+            IServiceProvider serviceProvider)
         {
-            m_Logger = logger;
-            m_actor = actor;
-            m_commandEx = commandEx;
+            _userDirectory = userDirectory;
+            _commandExecutor = commandExecutor;
         }
         public Task HandleEventAsync(object sender, UnturnedPlayerSpawnedEvent @event)
         {
+
             var asset = Assets.find(EAssetType.EFFECT, m_Random.Next(3) switch { 0 => 124, 1 => 130, _ => 134 });
             Player player = @event.Player.Player;
             var eff = new TriggerEffectParameters((EffectAsset)asset)
@@ -54,7 +56,6 @@ namespace EventoMX.Eventos
                 relevantDistance = 10
             };
             EffectManager.triggerEffect(eff);
-            //m_commandEx.ExecuteAsync(, new string[1] { $"kit {@event.Player.SteamId.ToString()} {GetRandomKit()}" }, string.Empty);
             return Task.CompletedTask;
         }
          

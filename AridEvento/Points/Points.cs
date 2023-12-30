@@ -10,6 +10,13 @@ namespace EventoMX.Points
 {
     public class Points
     {
-        public static Dictionary<CSteamID, int> PointsTrack = new Dictionary<CSteamID, int>();
+        public class PlayerData
+        {
+            public int Points { get; set; }
+            public string PlayerName { get; set; }
+        }
+
+        public static Dictionary<CSteamID, PlayerData> PointsTrack = new Dictionary<CSteamID, PlayerData>();
+
     }
 }

@@ -27,6 +27,7 @@ using OpenMod.Unturned.Players.Inventory.Events;
 using Steamworks;
 using OpenMod.Unturned.Players.Chat.Events;
 using UnityEngine;
+using static EventoMX.Points.Points;
 
 // For more, visit https://openmod.github.io/openmod-docs/devdoc/guides/getting-started.html
 
@@ -37,7 +38,6 @@ namespace EventoMX.Eventos
     public class UnturnedPlayerOpenedStorageEventListener : IEventListener<UnturnedPlayerOpenedStorageEvent>
     {
         private readonly ILogger<UnturnedPlayerOpenedStorageEventListener> m_Logger;
-        Points.Points pointsInstance = new Points.Points();
 
         public UnturnedPlayerOpenedStorageEventListener(ILogger<UnturnedPlayerOpenedStorageEventListener> logger)
         {
@@ -49,26 +49,34 @@ namespace EventoMX.Eventos
             BarricadeDrop barricade = BarricadeManager.FindBarricadeByRootTransform(trans);
             BarricadeManager.destroyBarricade(barricade, (byte)trans.position.x, (byte)trans.position.y, 0);
             CSteamID steamId = @event.Player.SteamId;
-            if(barricade.asset.id == 59708)
+            int pointsToAdd = 2;
+            if (barricade.asset.id == 59708)
             {
+                pointsToAdd += 3;
                 ChatManager.serverSendMessage($"<b>{@event.Player.Player.name}</b> tomó el Airdrop", Color.white, useRichTextFormatting: true);
+                Item item = new Item(59389, true);
+                Item item2 = new Item(59388, true);
+                @event.Player.Player.inventory.tryAddItemAuto(item2, true, true, true, false);
+                @event.Player.Player.inventory.tryAddItemAuto(item, true, true, true, false);
             }
             else
             {
                 ChatManager.serverSendMessage($"<b>{@event.Player.Player.name}</b> encontró un Regalo", Color.white, useRichTextFormatting: true);
+
             }
-            
-            int pointsToAdd = 2;
             if (Points.Points.PointsTrack.ContainsKey(steamId))
             {
                 // If the SteamID already exists, add points to the existing total
-                Points.Points.PointsTrack[steamId] += pointsToAdd;
+                Points.Points.PointsTrack[steamId] = new PlayerData { Points = Points.Points.PointsTrack[steamId].Points + pointsToAdd, PlayerName = @event.Player.Player.channel.owner.playerID.characterName };
             }
             else
             {
                 // If the SteamID doesn't exist, add a new entry with the specified points
-                Points.Points.PointsTrack.Add(steamId, pointsToAdd);
+                Points.Points.PointsTrack.Add(steamId, new PlayerData { Points = Points.Points.PointsTrack[steamId].Points + pointsToAdd, PlayerName = @event.Player.Player.channel.owner.playerID.characterName });
             }
+            EffectManager.sendUIEffectText(13, steamId, true, "BoxText (1)", (Points.Points.PointsTrack[steamId].Points + pointsToAdd).ToString());
+
+
             return Task.CompletedTask;
         }
          
