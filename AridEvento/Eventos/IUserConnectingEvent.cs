@@ -31,10 +31,6 @@ namespace EventoMX.Eventos
             SteamPending _pendingPlayer = Provider.pending.FirstOrDefault(x => x.playerID.steamID.m_SteamID == ulong.Parse(@event.User.Id));
             // Appareal
             {
-                var face = typeof(SteamPending).GetField("_face", BindingFlags.NonPublic | BindingFlags.Instance);
-                face.SetValue(_pendingPlayer, (byte)11);
-                var beard = typeof(SteamPending).GetField("_beard", BindingFlags.NonPublic | BindingFlags.Instance);
-                beard.SetValue(_pendingPlayer, (byte)8);
                 /* var hair = typeof(SteamPending).GetField("_hair", BindingFlags.NonPublic | BindingFlags.Instance);
                 hair.SetValue(_pendingPlayer, 0); 
 

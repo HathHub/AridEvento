@@ -57,9 +57,7 @@ namespace EventoMX.Eventos
         {
             Player _player = @event.Player.Player;
 
-            _player.clothing.vestState = new byte[0];
-            _player.clothing.hatState = new byte[0];
-            _player.clothing.backpackState = new byte[0];
+
             for (int page = 0; page < PlayerInventory.PAGES - 2; page++)
             {
                 int count = _player.inventory.getItemCount((byte)page);
@@ -69,6 +67,10 @@ namespace EventoMX.Eventos
                     _player.inventory.removeItem((byte)page, 0);
                 }
             }
+            _player.clothing.thirdClothes.backpack = 0;
+            _player.clothing.askWearBackpack(0, 0, new byte[0], false);
+            _player.clothing.thirdClothes.vest = 0;
+            _player.clothing.askWearVest(0, 0, new byte[0], false);
 
             CSteamID Killer = @event.Killer;
             var killer = m_provider.FindUser(Killer);

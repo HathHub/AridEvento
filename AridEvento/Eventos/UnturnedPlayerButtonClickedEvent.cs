@@ -57,8 +57,9 @@ namespace EventoMX.Eventos
             }
             else
             {
-                player.PlayerLife.ServerRespawn(false);
                 EffectManager.askEffectClearByID(22014, steamid);
+                System.Threading.Tasks.Task.Delay(100);
+                player.PlayerLife.ServerRespawn(false);
                 var executingPlayer = _userDirectory.GetUser(player.Player);
                 String command = Kits.KitsSelected.ContainsKey(steamid) ? Kits.KitsSelected[steamid] : "paintball";
                 _commandExecutor.ExecuteAsync(executingPlayer, new string[] { "kit", command }, string.Empty);

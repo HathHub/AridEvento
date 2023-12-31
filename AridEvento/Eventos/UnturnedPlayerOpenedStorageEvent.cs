@@ -66,7 +66,6 @@ namespace EventoMX.Eventos
             }
             if (Points.Points.PointsTrack.ContainsKey(steamId))
             {
-                // If the SteamID already exists, add points to the existing total
                 Points.Points.PointsTrack[steamId] = new PlayerData { Points = Points.Points.PointsTrack[steamId].Points + pointsToAdd, PlayerName = @event.Player.Player.channel.owner.playerID.characterName };
             }
             else
