@@ -43,7 +43,6 @@ namespace EventoMX.Commands
             UnturnedUser user = (UnturnedUser)Context.Actor;
             List<Vector3> allVectors = new List<Vector3>
         {
-            // Points
             new Vector3(-5f, -1f),
             new Vector3(-5.4f, -1.2f),
             new Vector3(-5.3f, -1.15f),
@@ -58,8 +57,6 @@ namespace EventoMX.Commands
             new Vector3(-4.6f, -1.6f),
             new Vector3(-5.8f, -2f),
             new Vector3(-5.8f, -2.2f),
-
-            // Line Segments
             new Vector3(-5.4f, -1.6f),
             new Vector3(-5.4f, -1.4f),
             new Vector3(-5.4f, -1.2f),
@@ -67,8 +64,6 @@ namespace EventoMX.Commands
             new Vector3(-5f, -1.2f),
             new Vector3(-5f, -1.6f),
             new Vector3(-5f, -1f),
-
-            // Intersection
             new Vector3(-5.0677286388647f, -2.198407f),
             new Vector3(-4.9333759047731f, -2.20096f),
             new Vector3(-5.1330180852235f, -2.49952f),
@@ -82,8 +77,6 @@ namespace EventoMX.Commands
             foreach (Vector3 vector in allVectors)
             {
                 Vector3 transformedVector = vector + user.Player.Player.transform.position;
-
-                // Use or store the transformedVector as needed
                 EffectManager.sendEffect(124, EffectManager.INSANE, transformedVector);
             }
             await UniTask.CompletedTask;
